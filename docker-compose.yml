@@ -1,0 +1,29 @@
+version: "3.9"
+services:
+  db:
+    image: mysql:5.7
+    volumes:
+      - ./data/db_data:/var/lib/mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: rootwordpress
+      MYSQL_DATABASE: wordpress
+      MYSQL_USER: wordpress
+      MYSQL_PASSWORD: 1qaz2wsx
+    
+  wordpress:
+    depends_on:
+      - db
+    image: ssl-wordpress:latest
+    build: .
+    volumes:
+      - ./data/wordpress_data:/var/www/html
+    ports:
+      - 3080:80
+      - 3443:443
+    restart: always
+    environment:
+      WORDPRESS_DB_HOST: db:3306
+      WORDPRESS_DB_USER: wordpress
+      WORDPRESS_DB_PASSWORD: 1qaz2wsx
+      WORDPRESS_DB_NAME: wordpress
